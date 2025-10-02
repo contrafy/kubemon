@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import * as k8s from './kubernetes'
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +52,36 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  // Kubernetes IPC handlers
+
+  ipcMain.handle('k8s-init', async (_, kubeconfigContent: string) => {
+    return k8s.initializeKubeConfig(kubeconfigContent)
+  })
+
+  ipcMain.handle('k8s-get-identity', async (_, kubeconfigContent: string) => {
+    return k8s.getUserIdentity(kubeconfigContent)
+  })
+
+  ipcMain.handle('k8s-list-pods', async (_, params: any) => {
+    return k8s.listPods(params)
+  })
+
+  ipcMain.handle('k8s-get-pod', async (_, id: string) => {
+    return k8s.getPod(id)
+  })
+
+  ipcMain.handle('k8s-update-pod', async (_, id: string, data: any) => {
+    return k8s.updatePod(id, data)
+  })
+
+  ipcMain.handle('k8s-delete-pod', async (_, id: string) => {
+    return k8s.deletePod(id)
+  })
+
+  ipcMain.handle('k8s-delete-multiple-pods', async (_, ids: string[]) => {
+    return k8s.deleteMultiplePods(ids)
+  })
 
   createWindow()
 

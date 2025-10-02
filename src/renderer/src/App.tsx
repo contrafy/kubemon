@@ -1,13 +1,24 @@
-import { Admin, ListGuesser } from "./components/admin";
+import { Admin } from "./components/admin";
 import { Resource } from "ra-core";
-import './index.css'
+import { authProvider } from "./lib/authProvider";
+import { dataProvider } from "./lib/dataProvider";
+import { PodsList } from "./components/resources/PodsList";
+import { PodShow } from "./components/resources/PodShow";
+import { PodEdit } from "./components/resources/PodEdit";
 
 function App(): React.JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-
   return (
-    <Admin>
-      <Resource name="pods" list={ListGuesser} />
+    <Admin 
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="KubeMon - Kubernetes Dashboard"
+    >
+      <Resource 
+        name="pods" 
+        list={PodsList} 
+        show={PodShow}
+        edit={PodEdit}
+      />
     </Admin>
   )
 }

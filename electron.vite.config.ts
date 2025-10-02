@@ -14,8 +14,27 @@ export default defineConfig({
     resolve: {
       alias: {
         "@": resolve(__dirname, "src/renderer/src"),
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        buffer: 'buffer',
+        process: 'process/browser',
+        util: 'util',
+        stream: 'stream',
+        events: 'events',
+        path: 'path-browserify',
+        crypto: 'crypto-browserify',
+        os: 'os-browserify',
+        url: 'url',
+        querystring: 'querystring-es3',
+        assert: 'assert'
       }
+    },
+    define: {
+      global: 'globalThis',
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env': '{}'
+    },
+    optimizeDeps: {
+      include: ['buffer', 'process']
     },
     plugins: [react(), tailwindcss()]
   }
