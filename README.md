@@ -1,2 +1,1 @@
-# kubemon
-Lightweight Kubernetes Dashboard
+in progress lol
